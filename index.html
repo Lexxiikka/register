@@ -19,12 +19,20 @@
             height: 100%;
             overflow: hidden;
             background-color: #121214;
+            color: #dbdee1;
+            font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         .global {
             display: flex;
             width: 100vw;
             height: 100vh;
+            position: relative;
+            background-color: #121214;
+        }
+
+        .custom-title-block+.custom-title-block {
+            margin-top: -17px;
         }
 
         .selector {
@@ -33,6 +41,10 @@
             overflow: hidden;
             position: relative;
             cursor: pointer;
+            z-index: 2;
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                filter 0.7s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .selector img {
@@ -50,21 +62,698 @@
             filter: brightness(1) blur(0px);
             transform: scale(1.1);
         }
+
+        /* Анимация нажатой (активной) колонки */
+        .selector.is-active {
+            transform: scale(1.35);
+            filter: blur(28px);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        /* Анимация выезда остальных колонок */
+        .selector.exit-left {
+            transform: translateX(-100vw);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .selector.exit-right {
+            transform: translateX(100vw);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .selector.exit-down {
+            transform: translateY(100vh);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .global.view-open .selector img {
+            pointer-events: none;
+        }
+
+        /* --- Контентные экраны --- */
+        .page-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transform: scale(0.96);
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.15s,
+                visibility 0.6s;
+            z-index: 10;
+        }
+
+        .page-view.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        /* --- Кнопка "Назад" --- */
+        .back-btn {
+            position: absolute;
+            top: 14px;
+            left: 20px;
+            z-index: 100;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: #1a1a1e;
+            border: 1px solid #333338;
+            color: #ffffff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-20px);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s,
+                transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) 0.2s,
+                visibility 0.4s,
+                background 0.2s ease,
+                border-color 0.2s ease;
+        }
+
+        .back-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
+        }
+
+        .back-btn:hover {
+            background: #25252b;
+            border-color: #55555c;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            display: block;
+            flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .back-btn:hover svg {
+            transform: translateX(-3px);
+        }
+
+        /* --- О нас --- */
+        .about {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            background-color: #121214;
+        }
+
+        .about h1 {
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .about p {
+            font-size: 1.15rem;
+            max-width: 650px;
+            line-height: 1.6;
+            color: #949ba4;
+            white-space: pre-line;
+        }
+
+        /* Блок ссылок в разделе "О нас" (без фона) */
+        .about-links {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 36px;
+            margin-top: 40px;
+        }
+
+        /* Размер изображений ссылок эксклюзивно для раздела "О нас" */
+        .about-links .footer-link-item img {
+            width: 100px;
+            height: 100px;
+        }
+
+        /* --- Реестр --- */
+        .register {
+            background-color: #1a1a1e;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .register-header {
+            width: 100%;
+            height: 64px;
+            background-color: #121214;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid #27282d;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+
+        .register-header h2 {
+            font-size: 1.25rem;
+            color: #f2f3f5;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .register-body {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .register-body::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .register-body::-webkit-scrollbar-track {
+            background: #1a1a1e;
+        }
+
+        .register-body::-webkit-scrollbar-thumb {
+            background: #111113;
+            border-radius: 4px;
+        }
+
+        .discord-feed {
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 24px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        @keyframes feedItemFadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(14px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .discord-feed>* {
+            animation: feedItemFadeUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .discord-message {
+            display: flex;
+            gap: 16px;
+            padding: 4px 8px;
+            background: transparent;
+        }
+
+        .discord-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .discord-body {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .discord-meta {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .discord-username {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #f2f3f5;
+            cursor: default;
+            text-decoration: none !important;
+        }
+
+        .discord-badge {
+            background-color: #5865f2;
+            color: #ffffff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            padding: 1px 4px;
+            border-radius: 3px;
+            text-transform: uppercase;
+        }
+
+        .discord-text {
+            font-size: 0.95rem;
+            line-height: 1.4;
+            color: #dbdee1;
+            word-break: break-word;
+        }
+
+        .discord-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        .discord-divider::before,
+        .discord-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #2e3037;
+        }
+
+        .discord-divider span {
+            padding: 0 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #949ba4;
+        }
+
+        .discord-notice {
+            background-color: #141416;
+            border-left: 4px solid #5865f2;
+            padding: 8px 12px;
+            border-radius: 2px 4px 4px 2px;
+            font-size: 0.88rem;
+            color: #b5bac1;
+        }
+
+        .discord-paragraph {
+            padding: 6px 12px;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: #c4c9ce;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .custom-title-block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            margin: 14px 0 8px;
+            width: 100%;
+        }
+
+        .custom-title-line {
+            flex: 1;
+            border-bottom: 1px solid #2e3037;
+        }
+
+        .custom-title-text {
+            padding: 0 14px;
+            line-height: 1.2;
+        }
+
+        /* --- Статичный подвал --- */
+        .register-footer {
+            background-color: #222327;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 28px;
+            padding: 16px 20px;
+            border-top: 1px solid #2c2e33;
+            width: 100%;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+
+        .footer-link-item {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
+
+        .footer-link-item img {
+            width: 36px;
+            height: 36px;
+            object-fit: cover;
+            opacity: 0.85;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .footer-link-item img.is-round {
+            border-radius: 50%;
+        }
+
+        .footer-link-item:hover img {
+            opacity: 1;
+            transform: translateY(-2px);
+        }
+
+        .footer-link-item .tooltip-text {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            background-color: #111214;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 500;
+            padding: 6px 10px;
+            border-radius: 6px;
+            white-space: nowrap;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+            z-index: 200;
+        }
+
+        .footer-link-item .tooltip-text::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: #111214 transparent transparent transparent;
+        }
+
+        .footer-link-item:hover .tooltip-text {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(-50%) translateY(0);
+        }
     </style>
 </head>
 
 <body>
-    <div class="global">
+    <div class="global" id="global_container">
+        <!-- Кнопка Назад -->
+        <button class="back-btn" id="back_btn">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                <defs>
+                    <path id="chevron"
+                        d="M 262 92 L 34 243 C 18 251 18 261 34 269 L 262 420 C 276 430 292 417 284 401 L 222 256 L 284 111 C 292 95 276 82 262 92 Z"
+                        fill="#ffffff" stroke="#000000" stroke-width="32" stroke-linejoin="round"
+                        stroke-linecap="round" />
+                </defs>
+                <use href="#chevron" x="220" />
+                <use href="#chevron" x="110" />
+                <use href="#chevron" x="0" />
+            </svg>
+            <span>Назад</span>
+        </button>
+
+        <!-- Стартовые колонки -->
         <div class="selector" id="selector_left">
-            <img src="assets/left.png" alt="LEFT">
+            <img id="img_left" src="assets/left.png" alt="LEFT">
         </div>
         <div class="selector" id="selector_center">
-            <img src="assets/center.png" alt="CENTER">
+            <img id="img_center" src="assets/center.png" alt="CENTER">
         </div>
         <div class="selector" id="selector_right">
-            <img src="assets/right.png" alt="RIGHT">
+            <img id="img_right" src="assets/right.png" alt="RIGHT">
+        </div>
+
+        <!-- Раздел Реестра -->
+        <div class="register page-view" id="register_section">
+            <header class="register-header">
+                <h2 id="register_title">Реестр</h2>
+            </header>
+
+            <div class="register-body" id="register_body">
+                <div class="discord-feed" id="register_feed"></div>
+                <footer class="register-footer" id="register_footer"></footer>
+            </div>
+        </div>
+
+        <!-- Раздел О нас (настраивается из config.json) -->
+        <div class="about page-view" id="about_section">
+            <h1 id="about_title">О нас</h1>
+            <p id="about_description"></p>
+            <div class="about-links" id="about_links"></div>
         </div>
     </div>
+
+    <script>
+        const globalContainer = document.getElementById('global_container');
+        const leftSelector = document.getElementById('selector_left');
+        const centerSelector = document.getElementById('selector_center');
+        const rightSelector = document.getElementById('selector_right');
+        const selectors = [leftSelector, centerSelector, rightSelector];
+
+        const imgLeft = document.getElementById('img_left');
+        const imgCenter = document.getElementById('img_center');
+        const imgRight = document.getElementById('img_right');
+
+        const pageViews = document.querySelectorAll('.page-view');
+        const backBtn = document.getElementById('back_btn');
+
+        const registerSection = document.getElementById('register_section');
+        const registerTitle = document.getElementById('register_title');
+        const registerBody = document.getElementById('register_body');
+        const registerFeed = document.getElementById('register_feed');
+
+        const registerFooter = document.getElementById('register_footer');
+        const aboutSection = document.getElementById('about_section');
+        const aboutTitle = document.getElementById('about_title');
+        const aboutDescription = document.getElementById('about_description');
+        const aboutLinks = document.getElementById('about_links');
+
+        let siteConfig = null;
+
+        function getRandomItem(arr) {
+            if (!arr || arr.length === 0) return null;
+            return arr[Math.floor(Math.random() * arr.length)];
+        }
+
+        function applyRandomImages() {
+            if (!siteConfig || !siteConfig.selector_images) return;
+            const cfg = siteConfig.selector_images;
+
+            const leftImg = getRandomItem(cfg.left);
+            if (leftImg) imgLeft.src = leftImg;
+
+            const centerImg = getRandomItem(cfg.center);
+            if (centerImg) imgCenter.src = centerImg;
+
+            const rightImg = getRandomItem(cfg.right);
+            if (rightImg) imgRight.src = rightImg;
+        }
+
+        function renderAboutSection() {
+            if (!siteConfig || !siteConfig.about) return;
+            if (siteConfig.about.title) {
+                aboutTitle.innerHTML = siteConfig.about.title;
+            }
+            if (siteConfig.about.description) {
+                aboutDescription.innerHTML = siteConfig.about.description;
+            }
+            if (siteConfig.about.show_links === false) {
+                aboutLinks.style.display = 'none';
+            } else {
+                aboutLinks.style.display = 'flex';
+            }
+        }
+
+        async function loadConfig() {
+            try {
+                const res = await fetch('config.json');
+                siteConfig = await res.json();
+                applyRandomImages();
+                renderAboutSection();
+                renderFooterLinks();
+            } catch (err) {
+                console.warn('Не удалось загрузить config.json. Запустите через Live Server.', err);
+            }
+        }
+        loadConfig();
+
+        function renderFooterLinks() {
+            registerFooter.innerHTML = '';
+            aboutLinks.innerHTML = '';
+
+            if (!siteConfig || !siteConfig.footer_links) return;
+
+            siteConfig.footer_links.forEach(item => {
+                const roundClass = item.round ? 'is-round' : '';
+
+                const linkHTML = `
+                    <a class="footer-link-item" href="${item.url || '#'}" target="_blank" rel="noopener noreferrer">
+                        <img src="${item.icon}" class="${roundClass}" alt="${item.tooltip || 'Ссылка'}">
+                        <span class="tooltip-text">${item.tooltip || ''}</span>
+                    </a>
+                `;
+
+                registerFooter.insertAdjacentHTML('beforeend', linkHTML);
+                aboutLinks.insertAdjacentHTML('beforeend', linkHTML);
+            });
+        }
+
+        function showView(activeSelector, targetSection) {
+            globalContainer.classList.add('view-open');
+
+            activeSelector.classList.add('is-active');
+
+            if (leftSelector !== activeSelector) leftSelector.classList.add('exit-left');
+            if (centerSelector !== activeSelector) centerSelector.classList.add('exit-down');
+            if (rightSelector !== activeSelector) rightSelector.classList.add('exit-right');
+
+            pageViews.forEach(el => el.classList.remove('active'));
+            targetSection.classList.add('active');
+            backBtn.classList.add('visible');
+
+            if (targetSection === registerSection) {
+                registerBody.scrollTop = 0;
+            }
+        }
+
+        function showHome() {
+            pageViews.forEach(el => el.classList.remove('active'));
+            backBtn.classList.remove('visible');
+
+            selectors.forEach(sel => {
+                sel.classList.remove('is-active', 'exit-left', 'exit-right', 'exit-down');
+            });
+
+            globalContainer.classList.remove('view-open');
+        }
+
+        function renderFeed(listKey) {
+            registerFeed.innerHTML = '';
+
+            if (!siteConfig || !siteConfig.lists || !siteConfig.lists[listKey]) {
+                registerTitle.innerHTML = 'Список не найден';
+                registerFeed.innerHTML = '<p style="color: #949ba4;">Данные отсутствуют или файл config.json не заполнен.</p>';
+                return;
+            }
+
+            const data = siteConfig.lists[listKey];
+            registerTitle.innerHTML = data.title || 'Реестр';
+
+            (data.items || []).forEach((item, index) => {
+                let el = null;
+
+                if (item.type === 'user') {
+                    el = document.createElement('div');
+                    el.className = 'discord-message';
+
+                    const avatarSrc = item.img || 'avatars/default.png';
+                    const nameColorStyle = item.nameColor ? `style="color: ${item.nameColor};"` : '';
+
+                    let badgeHtml = '';
+                    if (item.tag) {
+                        const tagColorStyle = item.tagColor ? `style="background-color: ${item.tagColor};"` : '';
+                        badgeHtml = `<span class="discord-badge" ${tagColorStyle}>${item.tag}</span>`;
+                    }
+
+                    el.innerHTML = `
+                        <img class="discord-avatar" src="${avatarSrc}" alt="${item.name || 'User'}">
+                        <div class="discord-body">
+                            <div class="discord-meta">
+                                <span class="discord-username" ${nameColorStyle}>${item.name || 'Неизвестный'}</span>
+                                ${badgeHtml}
+                            </div>
+                            <div class="discord-text">${item.text || ''}</div>
+                        </div>
+                    `;
+
+                } else if (item.type === 'divider') {
+                    el = document.createElement('div');
+                    el.className = 'discord-divider';
+                    el.innerHTML = `<span>${item.text || ''}</span>`;
+
+                } else if (item.type === 'notice') {
+                    el = document.createElement('div');
+                    el.className = 'discord-notice';
+                    el.innerHTML = item.text || '';
+
+                } else if (item.type === 'text') {
+                    el = document.createElement('div');
+                    el.className = 'discord-paragraph';
+                    el.innerHTML = item.text || '';
+
+                } else if (item.type === 'title') {
+                    el = document.createElement('div');
+                    el.className = 'custom-title-block';
+
+                    const span = document.createElement('span');
+                    span.className = 'custom-title-text';
+                    span.innerHTML = item.text || '';
+
+                    if (item.bold) span.style.fontWeight = '700';
+                    if (item.italic) span.style.fontStyle = 'italic';
+                    if (item.size) span.style.fontSize = item.size;
+                    if (item.textColor) span.style.color = item.textColor;
+
+                    if (item.lines) {
+                        const leftLine = document.createElement('div');
+                        leftLine.className = 'custom-title-line';
+
+                        const rightLine = document.createElement('div');
+                        rightLine.className = 'custom-title-line';
+
+                        if (item.linesColor) {
+                            leftLine.style.borderColor = item.linesColor;
+                            rightLine.style.borderColor = item.linesColor;
+                        }
+
+                        el.appendChild(leftLine);
+                        el.appendChild(span);
+                        el.appendChild(rightLine);
+                    } else {
+                        el.appendChild(span);
+                    }
+                }
+
+                if (el) {
+                    el.style.animationDelay = `${index * 0.035}s`;
+                    registerFeed.appendChild(el);
+                }
+            });
+        }
+
+        leftSelector.addEventListener('click', () => {
+            renderFeed('left');
+            showView(leftSelector, registerSection);
+        });
+
+        centerSelector.addEventListener('click', () => {
+            renderFeed('center');
+            showView(centerSelector, registerSection);
+        });
+
+        rightSelector.addEventListener('click', () => {
+            showView(rightSelector, aboutSection);
+        });
+
+        backBtn.addEventListener('click', showHome);
+    </script>
 </body>
 
 </html>
