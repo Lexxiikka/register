@@ -23,6 +23,159 @@
             font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
+        .preloader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #0e0e10;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 18px;
+            user-select: none;
+            transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+                        visibility 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .preloader-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .preloader-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .preloader-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            letter-spacing: 0.8px;
+            color: #f2f3f5;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .preloader-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #2b2d31;
+            border-top: 2px solid #5865f2;
+            border-radius: 50%;
+            animation: preloaderSpin 0.8s linear infinite;
+        }
+
+        @keyframes preloaderSpin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .preloader-track {
+            width: 280px;
+            height: 6px;
+            background-color: #1e1f22;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .preloader-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #5865f2, #7983f5);
+            border-radius: 8px;
+            transition: width 0.25s ease-out;
+            box-shadow: 0 0 10px rgba(88, 101, 242, 0.5);
+        }
+
+        .preloader-info {
+            display: flex;
+            justify-content: space-between;
+            width: 280px;
+            font-size: 0.82rem;
+            color: #949ba4;
+        }
+
+        .preloader-error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #18191c;
+            border: 1px solid #35363c;
+            padding: 26px 32px;
+            border-radius: 8px;
+            max-width: 440px;
+            width: 90%;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            gap: 16px;
+            animation: feedItemFadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .preloader-error-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #f23f43;
+        }
+
+        .preloader-error-desc {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #dbdee1;
+        }
+
+        .preloader-error-desc b {
+            color: #ffffff;
+        }
+
+        .preloader-actions {
+            display: flex;
+            gap: 14px;
+            width: 100%;
+            justify-content: center;
+            margin-top: 6px;
+        }
+
+        .preloader-btn {
+            padding: 10px 22px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.88rem;
+            transition: background 0.2s ease, transform 0.1s ease;
+        }
+
+        .preloader-btn:active {
+            transform: scale(0.97);
+        }
+
+        .preloader-btn-primary {
+            background-color: #5865f2;
+            color: #ffffff;
+        }
+
+        .preloader-btn-primary:hover {
+            background-color: #4752c4;
+        }
+
+        .preloader-btn-reload {
+            background-color: #4e5058;
+            color: #ffffff;
+        }
+
+        .preloader-btn-reload:hover {
+            background-color: #6d6f78;
+        }
+
         .global {
             display: flex;
             width: 100vw;
@@ -63,7 +216,6 @@
             transform: scale(1.1);
         }
 
-        /* Анимация нажатой (активной) колонки */
         .selector.is-active {
             transform: scale(1.35);
             filter: blur(28px);
@@ -72,7 +224,6 @@
             z-index: 3;
         }
 
-        /* Анимация выезда остальных колонок */
         .selector.exit-left {
             transform: translateX(-100vw);
             opacity: 0;
@@ -95,7 +246,6 @@
             pointer-events: none;
         }
 
-        /* --- Контентные экраны --- */
         .page-view {
             position: absolute;
             top: 0;
@@ -119,7 +269,6 @@
             transform: scale(1);
         }
 
-        /* --- Кнопка "Назад" --- */
         .back-btn {
             position: absolute;
             top: 14px;
@@ -168,7 +317,6 @@
             transform: translateX(-3px);
         }
 
-        /* --- О нас --- */
         .about {
             display: flex;
             flex-direction: column;
@@ -193,7 +341,6 @@
             white-space: pre-line;
         }
 
-        /* Блок ссылок в разделе "О нас" (без фона) */
         .about-links {
             display: flex;
             justify-content: center;
@@ -202,13 +349,11 @@
             margin-top: 40px;
         }
 
-        /* Размер изображений ссылок эксклюзивно для раздела "О нас" */
         .about-links .footer-link-item img {
             width: 100px;
             height: 100px;
         }
 
-        /* --- Реестр --- */
         .register {
             background-color: #1a1a1e;
             display: flex;
@@ -393,7 +538,6 @@
             line-height: 1.2;
         }
 
-        /* --- Статичный подвал --- */
         .register-footer {
             background-color: #222327;
             display: flex;
@@ -472,6 +616,36 @@
 </head>
 
 <body>
+    <!-- Экран предзагрузки -->
+    <div class="preloader-overlay" id="preloader">
+        <div class="preloader-content" id="preloader_content">
+            <div class="preloader-title">
+                <div class="preloader-spinner"></div>
+                <span>Загрузка ресурсов...</span>
+            </div>
+            <div class="preloader-track">
+                <div class="preloader-bar" id="preloader_bar"></div>
+            </div>
+            <div class="preloader-info">
+                <span id="preloader_status">0 / 0</span>
+                <span id="preloader_percent">0%</span>
+            </div>
+        </div>
+
+        <div class="preloader-error" id="preloader_error" style="display: none;">
+            <div class="preloader-error-title">Ошибка загрузки ресурсов</div>
+            <p class="preloader-error-desc">
+                Не удалось загрузить изображений: <b id="failed_count">0</b>.<br>
+                Подробности смотрите в консоли браузера (F12).<br><br>
+                Хотите всё равно перейти на сайт?
+            </p>
+            <div class="preloader-actions">
+                <button class="preloader-btn preloader-btn-primary" id="btn_continue">ДА</button>
+                <button class="preloader-btn preloader-btn-reload" id="btn_reload">ПЕРЕЗАГРУЗИТЬ</button>
+            </div>
+        </div>
+    </div>
+
     <div class="global" id="global_container">
         <!-- Кнопка Назад -->
         <button class="back-btn" id="back_btn">
@@ -512,7 +686,7 @@
             </div>
         </div>
 
-        <!-- Раздел О нас (настраивается из config.json) -->
+        <!-- Раздел О нас -->
         <div class="about page-view" id="about_section">
             <h1 id="about_title">О нас</h1>
             <p id="about_description"></p>
@@ -521,6 +695,17 @@
     </div>
 
     <script>
+        const preloader = document.getElementById('preloader');
+        const preloaderContent = document.getElementById('preloader_content');
+        const preloaderBar = document.getElementById('preloader_bar');
+        const preloaderPercent = document.getElementById('preloader_percent');
+        const preloaderStatus = document.getElementById('preloader_status');
+
+        const preloaderError = document.getElementById('preloader_error');
+        const failedCountEl = document.getElementById('failed_count');
+        const btnContinue = document.getElementById('btn_continue');
+        const btnReload = document.getElementById('btn_reload');
+
         const globalContainer = document.getElementById('global_container');
         const leftSelector = document.getElementById('selector_left');
         const centerSelector = document.getElementById('selector_center');
@@ -581,19 +766,6 @@
             }
         }
 
-        async function loadConfig() {
-            try {
-                const res = await fetch('config.json');
-                siteConfig = await res.json();
-                applyRandomImages();
-                renderAboutSection();
-                renderFooterLinks();
-            } catch (err) {
-                console.warn('Не удалось загрузить config.json. Запустите через Live Server.', err);
-            }
-        }
-        loadConfig();
-
         function renderFooterLinks() {
             registerFooter.innerHTML = '';
             aboutLinks.innerHTML = '';
@@ -614,6 +786,111 @@
                 aboutLinks.insertAdjacentHTML('beforeend', linkHTML);
             });
         }
+
+        function collectAllImageUrls(config) {
+            const urls = new Set();
+
+            if (config.selector_images) {
+                ['left', 'center', 'right'].forEach(side => {
+                    if (Array.isArray(config.selector_images[side])) {
+                        config.selector_images[side].forEach(url => urls.add(url));
+                    }
+                });
+            }
+
+            if (Array.isArray(config.footer_links)) {
+                config.footer_links.forEach(link => {
+                    if (link.icon) urls.add(link.icon);
+                });
+            }
+
+            if (config.lists) {
+                Object.values(config.lists).forEach(list => {
+                    if (Array.isArray(list.items)) {
+                        list.items.forEach(item => {
+                            if (item.img) urls.add(item.img);
+                        });
+                    }
+                });
+            }
+
+            return Array.from(urls);
+        }
+
+        function preloadImages(urlList) {
+            return new Promise((resolve) => {
+                const total = urlList.length;
+                if (total === 0) {
+                    resolve({ failedCount: 0 });
+                    return;
+                }
+
+                let loadedCount = 0;
+                let failedCount = 0;
+
+                const onFinished = (isError, url) => {
+                    loadedCount++;
+
+                    if (isError) {
+                        failedCount++;
+                        console.error(`[Preloader Error] Не удалось загрузить изображение: "${url}"`);
+                    }
+
+                    const percent = Math.round((loadedCount / total) * 100);
+                    preloaderBar.style.width = `${percent}%`;
+                    preloaderPercent.textContent = `${percent}%`;
+                    preloaderStatus.textContent = `${loadedCount} / ${total}`;
+
+                    if (loadedCount >= total) {
+                        setTimeout(() => resolve({ failedCount }), 300);
+                    }
+                };
+
+                urlList.forEach(url => {
+                    const img = new Image();
+                    img.onload = () => onFinished(false, url);
+                    img.onerror = () => onFinished(true, url);
+                    img.src = url;
+                });
+            });
+        }
+
+        async function initApp() {
+            try {
+                const res = await fetch('config.json');
+                siteConfig = await res.json();
+
+                const imageUrls = collectAllImageUrls(siteConfig);
+                preloaderStatus.textContent = `0 / ${imageUrls.length}`;
+
+                const result = await preloadImages(imageUrls);
+
+                applyRandomImages();
+                renderAboutSection();
+                renderFooterLinks();
+
+                if (result.failedCount > 0) {
+                    preloaderContent.style.display = 'none';
+                    failedCountEl.textContent = result.failedCount;
+                    preloaderError.style.display = 'flex';
+
+                    btnReload.addEventListener('click', () => {
+                        window.location.reload();
+                    });
+
+                    btnContinue.addEventListener('click', () => {
+                        preloader.classList.add('hidden');
+                    });
+                } else {
+                    preloader.classList.add('hidden');
+                }
+            } catch (err) {
+                console.error('Ошибка при инициализации:', err);
+                preloader.classList.add('hidden');
+            }
+        }
+
+        initApp();
 
         function showView(activeSelector, targetSection) {
             globalContainer.classList.add('view-open');
