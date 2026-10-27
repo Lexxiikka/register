@@ -115,7 +115,7 @@
         },
         {
           "type": "user",
-          "img": "avatars/Trisha.png",
+          "img": "avatars/trisha.png",
           "name": "Триша",
           "nameColor": "#f19275",
           "tag": "Третий император Священной Империи Алонии",
@@ -147,7 +147,7 @@
         },
         {
           "type": "user",
-          "img": "avatars/Denker.png",
+          "img": "avatars/denker.png",
           "name": "Denker",
           "nameColor": "#30894c",
           "text": "Да, именно он занимался строительством колизея в Алонии., правда так его и не достроив... Впрочем, этот долг он нам ещё вернет!"
