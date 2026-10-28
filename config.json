@@ -216,6 +216,15 @@
         },
         {
           "type": "user",
+          "img": "avatars/Dogmat.png",
+          "name": "Догмат",
+          "nameColor": "#c238d8",
+          "tag": "№ 11",
+          "tagColor": "#645b35",
+          "text": "Нет ну просто, данное изображение говорит обо всём: <br><img src=\"images/kidala11.png\" alt=\"Я пополнил стим, и теперь я могу купить хеллдрайверс, но не буду\""
+        },
+        {
+          "type": "user",
           "img": "avatars/Don.png",
           "name": "Дон",
           "nameColor": "#531610",
